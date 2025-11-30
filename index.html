@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abdul's Pro AI Pal</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CSS Variables for theming */
+        :root {
+            --bg-color-light: #f7f9fc;
+            --text-color-light: #333;
+            --header-bg-light: #ffffff;
+            --header-text-light: #222;
+            --main-bg-light: #ffffff;
+            --border-color-light: #e0e6ed;
+            --primary-color-light: #007bff;
+            --secondary-color-light: #28a745;
+            --shadow-light: 0 4px 20px rgba(0,0,0,0.08);
+            --chat-bubble-bg-user-light: #e0f2f7; 
+            --chat-bubble-bg-ai-light: #f1f0f0; 
+            --input-bg-light: #ffffff;
+            --input-border-light: #ced4da;
+            --scrollbar-thumb-light: #ccc;
+            --scrollbar-track-light: #f1f1f1;
+            --sidebar-bg-light: #333;
+            --sidebar-text-light: #f1f1f1;
+
+            --bg-color-dark: #212121;
+            --text-color-dark: #e0e0e0;
+            --header-bg-dark: #2c2c2c;
+            --header-text-dark: #e0e0e0;
+            --main-bg-dark: #333333;
+            --border-color-dark: #4a4a4a;
+            --primary-color-dark: #81d4fa;
+            --secondary-color-dark: #66bb6a;
+            --shadow-dark: 0 4px 20px rgba(0,0,0,0.4);
+            --chat-bubble-bg-user-dark: #4a4a4a;
+            --chat-bubble-bg-ai-dark: #5a5a5a;
+            --input-bg-dark: #3e3e3e;
+            --input-border-dark: #555;
+            --scrollbar-thumb-dark: #777;
+            --scrollbar-track-dark: #3a3a3a;
+            --sidebar-bg-dark: #2c2c2c;
+            --sidebar-text-dark: #e0e0e0;
+        }
+
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background-color: var(--bg-color-dark);
+            color: var(--text-color-dark);
+        }
+        body.dark-mode header {
+            background-color: var(--header-bg-dark);
+            color: var(--header-text-dark);
+            box-shadow: var(--shadow-dark);
+        }
+        body.dark-mode #sidebar {
+            background-color: var(--sidebar-bg-dark);
+            box-shadow: 2px 0 15px rgba(0,0,0,0.6);
+        }
+        body.dark-mode #sidebar a {
+            color: var(--sidebar-text-dark);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        body.dark-mode #sidebar a:hover {
+            background-color: #3a3a3a;
+        }
+        body.dark-mode #sidebar .closebtn {
+            color: var(--sidebar-text-dark);
+        }
+        body.dark-mode #overlay.active {
+            background-color: rgba(0,0,0,0.6);
+        }
+        body.dark-mode #chat-container {
+            background-color: var(--main-bg-dark);
+            box-shadow: var(--shadow-dark);
+            border-color: var(--border-color-dark);
+        }
+        body.dark-mode #chat-output {
+            background-color: var(--main-bg-dark);
+        }
+        body.dark-mode .message.user {
+            background-color: var(--chat-bubble-bg-user-dark);
+            color: var(--text-color-dark);
+            border-bottom-right-radius: 5px;
+        }
+        body.dark-mode .message.abdul-s-ai {
+            align-self: flex-start;
+            background-color: var(--chat-bubble-bg-ai-dark);
+            color: var(--text-color-dark);
+            border-bottom-left-radius: 5px;
+        }
+        body.dark-mode .chat-input-area {
+            background-color: var(--main-bg-dark);
+            border-top-color: var(--border-color-dark);
+        }
+        body.dark-mode .chat-input-area textarea {
+            background-color: var(--input-bg-dark);
+            color: var(--text-color-dark);
+            border-color: var(--input-border-dark);
+        }
+        body.dark-mode .input-icons button, body.dark-mode .input-icons label {
+            background-color: var(--input-bg-dark);
+            color: var(--text-color-dark);
+            border-color: var(--input-border-dark);
+        }
+        body.dark-mode .input-icons button:hover, body.dark-mode .input-icons label:hover {
+            background-color: var(--chat-bubble-bg-ai-dark);
+        }
+        body.dark-mode footer {
+            background-color: #2c2c2c;
+        }
+
+
+        /* Base Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color-light);
+            color: var(--text-color-light);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Scrollbar Styles */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--scrollbar-track-light);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-thumb-light);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+        body.dark-mode ::-webkit-scrollbar-track {
+            background: var(--scrollbar-track-dark);
+        }
+        body.dark-mode ::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-thumb-dark);
+        }
+        body.dark-mode ::-webkit-scrollbar-thumb:hover {
+            background: #999;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--header-bg-light);
+            color: var(--header-text-light);
+            padding: 1rem 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        header h1 .material-icons {
+            font-size: 2.2rem;
+            color: var(--primary-color-light);
+            transition: color 0.3s;
+        }
+        body.dark-mode header h1 .material-icons {
+            color: var(--primary-color-dark);
+        }
+
+        .nav-toggle, .mode-toggle {
+            background: none;
+            border: none;
+            color: var(--header-text-light);
+            font-size: 1.8rem;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s, transform 0.2s, color 0.3s;
+        }
+        .nav-toggle:hover, .mode-toggle:hover {
+            background-color: rgba(0,0,0,0.05);
+            transform: scale(1.05);
+        }
+        body.dark-mode .nav-toggle, body.dark-mode .mode-toggle {
+            color: var(--header-text-dark);
+        }
+        body.dark-mode .nav-toggle:hover, body.dark-mode .mode-toggle:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        .nav-toggle { order: -1; }
+        .mode-toggle { margin-left: 15px; }
+
+        /* Side Bar */
+        #sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 99;
+            top: 0;
+            left: 0;
+            background-color: var(--sidebar-bg-light);
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 70px;
+            box-shadow: 2px 0 15px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+        }
+        #sidebar a {
+            padding: 15px 32px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            color: var(--sidebar-text-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s ease;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        #sidebar a.active {
+            background-color: rgba(255,255,255,0.1);
+            color: var(--primary-color-dark);
+        }
+        #sidebar a:not(.active):hover {
+            color: var(--primary-color-light);
+            background-color: #444;
+            padding-left: 38px;
+        }
+        #sidebar .closebtn {
+            position: absolute;
+            top: 10px;
+            right: 25px;
+            font-size: 2.5rem;
+            color: var(--sidebar-text-light);
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        #sidebar .closebtn:hover {
+            color: var(--primary-color-light);
+        }
+        body.dark-mode #sidebar a:not(.active):hover {
+            background-color: #3a3a3a;
+        }
+        body.dark-mode #sidebar a.active {
+             background-color: rgba(255,255,255,0.1);
+             color: var(--primary-color-dark);
+        }
+        
+        /* Overlay for Closing Menu */
+        #overlay {
+            height: 100%;
+            width: 100%;
+            position: fixed;
+            z-index: 98; 
+            top: 0;
+            left: 0;
+            background-color: rgba(0,0,0,0.4);
+            transition: opacity 0.5s;
+            opacity: 0;
+            pointer-events: none;
+        }
+        #overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        body.dark-mode #overlay.active {
+            background-color: rgba(0,0,0,0.6);
+        }
+
+        /* Main Chat Container */
+        #chat-container {
+            flex-grow: 1;
+            max-width: 900px;
+            width: 95%;
+            margin: 20px auto;
+            background-color: var(--main-bg-light);
+            border-radius: 12px;
+            box-shadow: var(--shadow-light);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid var(--border-color-light);
+            transition: background-color 0.3s, box-shadow 0.3s, border-color 0.3s;
+        }
+
+        #chat-output {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background-color: var(--main-bg-light);
+            transition: background-color 0.3s;
+        }
+
+        /* Message Bubble Styles */
+        .message {
+            position: relative; 
+            max-width: 85%;
+            padding: 12px 18px;
+            border-radius: 20px;
+            line-height: 1.5;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            animation: fadeIn 0.5s ease-out;
+            word-wrap: break-word;
+        }
+        .message.user {
+            align-self: flex-end;
+            background-color: var(--chat-bubble-bg-user-light);
+            color: var(--text-color-light);
+            border-bottom-right-radius: 5px;
+        }
+        .message.abdul-s-ai {
+            align-self: flex-start;
+            background-color: var(--chat-bubble-bg-ai-light);
+            color: var(--text-color-light);
+            border-bottom-left-radius: 5px;
+        }
+        .message strong {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--primary-color-light);
+        }
+        .typing-indicator {
+            font-style: italic;
+            opacity: 0.7;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Message Action Icons (Copy/Delete) - NEMAN MAI AMFANI */
+        .message-actions {
+            position: absolute;
+            top: -10px;
+            right: 5px;
+            opacity: 0; /* Boye aiki */
+            transition: opacity 0.3s;
+            display: flex;
+            gap: 5px;
+            pointer-events: none; /* Da farko, ba za a iya danna su ba */
+        }
+        .message:hover .message-actions {
+            opacity: 1; /* Nuna a kan hover */
+            pointer-events: auto; /* Ba da damar dannawa */
+        }
+        .message-actions button {
+            background: rgba(0,0,0,0.1);
+            border: none;
+            border-radius: 50%;
+            color: var(--text-color-light);
+            font-size: 0.9rem;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .message-actions button:hover {
+            background-color: rgba(0,0,0,0.2);
+            transform: scale(1.05);
+        }
+        body.dark-mode .message-actions button {
+            background: rgba(255,255,255,0.1);
+            color: var(--text-color-dark);
+        }
+        body.dark-mode .message-actions button:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+        .message.user .message-actions {
+            left: 5px;
+            right: auto;
+        }
+
+        /* Code Block Styling in Chat */
+        .code-container {
+            position: relative;
+            margin-top: 10px;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.2);
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 10px;
+            background-color: #333; 
+            color: #f1f1f1;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+
+        .code-header .copy-btn {
+            background: none;
+            border: none;
+            color: #f1f1f1;
+            cursor: pointer;
+            font-size: 0.9em;
+            padding: 3px 8px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: background-color 0.2s;
+        }
+        .code-header .copy-btn:hover {
+            background-color: #555;
+        }
+        .code-header .copy-btn .material-icons {
+            font-size: 1.1em;
+        }
+
+        .message pre {
+            background-color: #2d2d2d; /* Kodin duhu */
+            color: #f8f8f2;
+            border-radius: 0 0 6px 6px; 
+            padding: 15px; 
+            overflow-x: auto;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+            margin-top: 0;
+            box-shadow: none; 
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        /* Cire Gyaran Dark Mode akan pre don kiyaye shi duhu don code */
+        body.dark-mode .message pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+        }
+        body.dark-mode .code-header {
+            background-color: #1e1e1e;
+        }
+        
+        /* Image Preview */
+        #image-preview-area {
+            padding: 10px 20px;
+            border-top: 1px solid var(--border-color-light);
+            display: none; 
+            align-items: center;
+            gap: 15px;
+            background-color: var(--main-bg-light);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        body.dark-mode #image-preview-area {
+            border-top-color: var(--border-color-dark);
+            background-color: var(--main-bg-dark);
+        }
+
+        #image-preview-area.active {
+            display: flex;
+        }
+
+        #image-preview {
+            max-width: 80px;
+            max-height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1px solid var(--border-color-light);
+        }
+        body.dark-mode #image-preview {
+            border-color: var(--border-color-dark);
+        }
+
+        #remove-image-btn {
+            background: none;
+            border: none;
+            color: red;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        #remove-image-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Chat Input Area - Ƙara Icons */
+        .chat-input-area {
+            padding: 15px 20px;
+            border-top: 1px solid var(--border-color-light);
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            background-color: var(--main-bg-light);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        .input-icons {
+            display: flex;
+            gap: 5px;
+        }
+        .input-icons button, .input-icons label {
+            background-color: var(--input-bg-light);
+            color: var(--text-color-light);
+            border: 1px solid var(--input-border-light);
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: background-color 0.3s, box-shadow 0.3s, border-color 0.3s, color 0.3s;
+            flex-shrink: 0;
+        }
+        .input-icons button:hover, .input-icons label:hover {
+            background-color: var(--chat-bubble-bg-ai-light);
+        }
+        .chat-input-area textarea {
+            font-family: Sans-Serif;
+            flex-grow: 1;
+            padding: 12px 15px;
+            border: 1px solid var(--input-border-light);
+            border-radius: 25px;
+            resize: none;
+            min-height: 45px;
+            max-height: 150px;
+            font-size: 1rem;
+            background-color: var(--input-bg-light);
+            color: var(--text-color-light);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+            overflow-y: hidden; /* Gyara don amfani da JavaScript resize */
+        }
+        .chat-input-area textarea:focus {
+            outline: none;
+            border-color: var(--primary-color-light);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+        }
+        .chat-input-area button {
+            background-color: var(--primary-color-light);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            flex-shrink: 0;
+        }
+        .chat-input-area button:hover {
+            background-color: #0069d9;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(0, 123, 255, 0.3);
+        }
+        .chat-input-area button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2);
+        }
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #333;
+            color: white;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        footer p {
+            margin: 0;
+            font-size: 0.9em;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.5rem; }
+            header h1 .material-icons { font-size: 1.8rem; }
+            .nav-toggle, .mode-toggle { font-size: 1.5rem; }
+            #sidebar { width: 0; }
+            #chat-container { width: 100%; margin: 10px auto; border-radius: 0; }
+            #chat-output { padding: 15px; }
+            .message { max-width: 90%; padding: 10px 15px; font-size: 0.95rem; }
+            .chat-input-area { padding: 10px 15px; }
+            .chat-input-area button, .input-icons button, .input-icons label {
+                width: 40px;
+                height: 40px;
+                font-size: 1.3rem;
+            }
+            .chat-input-area textarea { min-height: 40px; padding: 10px 15px; }
+            footer { padding: 10px; }
+            .message-actions { top: -8px; }
+            .message-actions button { width: 20px; height: 20px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div id="sidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        
+        <a href="#" onclick="startNewThread(true); closeNav();" class="new-chat-btn">
+            <i class="material-icons">add_box</i> Start New Chat
+        </a>
+        
+        <div id="threads-list" style="overflow-y: auto; flex-grow: 1;">
+            </div>
+
+        <div style="margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1);">
+            <a href="#" onclick="toggleDarkMode(); closeNav();">
+                <i class="material-icons" id="sidebar-mode-icon">light_mode</i> Toggle Dark Mode
+            </a>
+            <a href="#">
+                <i class="material-icons">settings</i> Settings
+            </a>
+        </div>
+    </div>
+
+    <div id="overlay" onclick="closeNav()"></div>
+
+    <header>
+        <button class="nav-toggle" onclick="openNav()">
+            <i class="material-icons">menu</i>
+        </button>
+        <h1>
+            <i class="material-icons">psychology</i> Abdul's Pro
+        </h1>
+        <button class="mode-toggle" onclick="toggleDarkMode()">
+            <i class="material-icons" id="mode-icon">light_mode</i>
+        </button>
+    </header>
+
+    <div id="chat-container">
+        <div id="image-preview-area">
+            <img id="image-preview" src="" alt="Image Preview">
+            <span id="image-filename"></span>
+            <button id="remove-image-btn"><i class="material-icons">close</i></button>
+        </div>
+
+        <div id="chat-output">
+             </div>
+
+        <div class="chat-input-area">
+            <div class="input-icons">
+                 <button id="voice-input-btn" title="Voice Input (Hausa/English)">
+                    <i class="material-icons">mic</i>
+                </button>
+                
+                <label for="image-upload" title="Upload Image">
+                    <i class="material-icons">image</i>
+                </label>
+                <input type="file" id="image-upload" accept="image/*" style="display: none;">
+            </div>
+            
+            <textarea id="chat-input" placeholder="Type your message here... or use the mic 🎤" rows="1"></textarea>
+            
+            <button id="send-chat-btn" title="Send (Ctrl+Enter)">
+                <i class="material-icons">send</i>
+            </button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Abdul's Pro AI Pal. Empowering your ideas. ✨</p>
+    </footer>
+
+     <script>
+        // --- JavaScript ---
+        // KA CANZA WANNAN DA API KEY DINKA MAI INGACCI
+        const GEMINI_API_KEY = "AIzaSyALIHyfUZhs3Lh4k1fivBaQxMe71O-KcBc"; 
+
+        const TEXT_MODEL = "gemini-2.5-flash";
+
+        // SABBIN RULES: Wannan zai zama *umarnin farko* na tattaunawar.
+        const ABDUL_RULES = `
+            [SYSTEM INSTRUCTION: You are Abdul's Professional AI. Your name is Abdul. You are an intelligent, helpful, and cheerful conversational partner. You are designed to assist users with text, image descriptions, and code. you are master and proffesinal in html5, CSS3, javaScript and firebase. Use appropriate emojis to add a cheerful and friendly tone to your responses. Answer all questions, even if the user writes in Hausa, respond to them with a high-quality answer. You must adhere to these constraints: 1. Do not generate anything illegal or dangerous. 2. Do not generate harmful, discriminatory, or hateful content. 3. Do not provide medical, legal, or financial advice. 4. Always be polite, helpful, and respectful. 5. If the user requests code, provide it in a markdown code block (\`\`\`lang\\ncode\\n\`\`\`). 6. If the user sends an image, analyze the image and provide a relevant response. 7. **You MUST answer questions in Hausa and English if the user uses English.**] 
+            
+            USER'S MESSAGE:
+        `; 
+        
+        // DOM Elements
+        const chatInput = document.getElementById('chat-input');
+        const sendChatBtn = document.getElementById('send-chat-btn');
+        const chatOutput = document.getElementById('chat-output');
+        const modeIcon = document.getElementById('mode-icon');
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.getElementById("overlay");
+        const threadsList = document.getElementById('threads-list');
+        const imageUpload = document.getElementById('image-upload');
+        const imagePreviewArea = document.getElementById('image-preview-area');
+        const imagePreview = document.getElementById('image-preview');
+        const imageFilename = document.getElementById('image-filename');
+        const removeImageBtn = document.getElementById('remove-image-btn');
+        const voiceInputBtn = document.getElementById('voice-input-btn');
+        const sidebarModeIcon = document.getElementById('sidebar-mode-icon');
+
+        // Global State
+        let allThreads = {};
+        let currentThreadId = null;
+        let uploadedImageBase64 = null; 
+
+        // --- Core Functions ---
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // Apply Dark Mode if enabled in Local Storage
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                document.body.classList.add('dark-mode');
+                modeIcon.textContent = 'dark_mode';
+                sidebarModeIcon.textContent = 'dark_mode';
+            } else {
+                modeIcon.textContent = 'light_mode';
+                sidebarModeIcon.textContent = 'light_mode';
+            }
+            
+            adjustTextareaHeight(chatInput);
+            
+            loadThreads();
+        });
+
+        function loadThreads() {
+            const storedThreads = localStorage.getItem('abdulAIPalThreads');
+            if (storedThreads) {
+                try {
+                    allThreads = JSON.parse(storedThreads);
+                    const ids = Object.keys(allThreads).sort((a, b) => b - a); // Sabuwar tattaunawa farko
+                    if (ids.length > 0) {
+                        // Neman tsohuwar tattaunawa ko sabuwa
+                        const lastActiveId = localStorage.getItem('lastActiveThreadId');
+                        const idToSwitch = ids.includes(lastActiveId) ? lastActiveId : ids[0];
+                        switchThread(idToSwitch);
+                    } else {
+                        startNewThread();
+                    }
+                } catch (e) {
+                    console.error("Error loading threads from local storage:", e);
+                    localStorage.removeItem('abdulAIPalThreads');
+                    startNewThread();
+                }
+            } else {
+                startNewThread();
+            }
+            renderThreadsList();
+        }
+
+        function saveThreads() {
+            localStorage.setItem('abdulAIPalThreads', JSON.stringify(allThreads));
+            if (currentThreadId) {
+                localStorage.setItem('lastActiveThreadId', currentThreadId);
+            }
+        }
+
+        function startNewThread(forceNew = false) {
+            // Idan akwai tsohuwar tattaunawa kuma bata da kusan komai sai dai welcome message, amfani da ita
+            if (!forceNew && currentThreadId && allThreads[currentThreadId] && allThreads[currentThreadId].history.length === 0) {
+                 // Nuna Welcome Message a UI kawai, ba tare da sanya shi a history ba.
+                 displayWelcomeMessage();
+                 return;
+            }
+            
+            const newId = Date.now().toString();
+            
+            allThreads[newId] = {
+                id: newId,
+                title: "New Chat " + (Object.keys(allThreads).length + 1),
+                history: [] // CIKIN BABU KOMAI! Wannan zai tabbatar da cewa saƙo na farko na API zai zama user.
+            };
+            switchThread(newId);
+            saveThreads();
+            renderThreadsList();
+        }
+
+        function displayWelcomeMessage() {
+             const welcomeMessage = {
+                role: "model", 
+                parts: [{ text: "Hi there! I'm Abdul, your professional AI assistant. I can help you with text, image ideas, and code. How can I assist you today? 😊" }],
+                id: 'welcome-message'
+            };
+            // Cire tsohuwar welcome message idan akwai
+            removeTypingIndicator(chatOutput); 
+            // Ƙara sabuwar
+            appendMessage(chatOutput, "Abdul's AI Pal", welcomeMessage, false);
+        }
+
+
+        function switchThread(id) {
+            if (!allThreads[id]) return;
+            
+            currentThreadId = id;
+            chatOutput.innerHTML = ''; 
+            
+            // Idan tarihin tattaunawar babu komai, nuna Welcome Message a UI
+            if (allThreads[id].history.length === 0) {
+                 displayWelcomeMessage();
+            }
+
+            allThreads[id].history.forEach(msg => {
+                const sender = msg.role === 'user' ? "You" : "Abdul's AI Pal";
+                appendMessage(chatOutput, sender, msg, false); 
+            });
+            chatOutput.scrollTop = chatOutput.scrollHeight;
+            renderThreadsList();
+            closeNav();
+        }
+        
+        function deleteThread(id) {
+            if (confirm("Are you sure you want to delete this chat thread?")) {
+                delete allThreads[id];
+                saveThreads();
+                
+                // Switch to the latest remaining thread or create a new one
+                const ids = Object.keys(allThreads).sort((a, b) => b - a);
+                if (ids.length > 0) {
+                    switchThread(ids[0]);
+                } else {
+                    startNewThread(true);
+                }
+                renderThreadsList(); // Re-render after switching thread
+            }
+        }
+
+        function renderThreadsList() {
+            threadsList.innerHTML = '';
+            
+            // Tabbatar an cire thread marasa saƙo kafin a nuna su
+            const filteredThreads = Object.values(allThreads).filter(thread => thread.history.length > 0);
+            const sortedThreads = filteredThreads.sort((a, b) => parseInt(b.id) - parseInt(a.id)); 
+
+            sortedThreads.forEach(thread => {
+                // Neman ainihin farkon saƙo na mai amfani don take 
+                const firstUserMessage = thread.history.find(msg => msg.role === 'user');
+                let titleText = firstUserMessage ? firstUserMessage.parts.find(p => p.text)?.text || "New Chat" : "New Chat";
+                
+                // Cire Umarnin Tsarin kafin a sanya shi a take
+                titleText = titleText.replace(ABDUL_RULES, '').trim(); 
+                if (titleText.startsWith("USER'S MESSAGE:")) {
+                    titleText = titleText.substring("USER'S MESSAGE:".length).trim();
+                }
+                
+                const title = titleText.length > 35 ? titleText.substring(0, 35) + '...' : titleText;
+
+                const threadDiv = document.createElement('div');
+                threadDiv.style.display = 'flex';
+                threadDiv.style.alignItems = 'center';
+                threadDiv.style.justifyContent = 'space-between';
+                
+                const threadLink = document.createElement('a');
+                threadLink.href = "#";
+                threadLink.setAttribute('onclick', `switchThread('${thread.id}')`);
+                threadLink.innerHTML = `<i class="material-icons" style="font-size: 1.1em;">chat</i> ${title}`; 
+                threadLink.setAttribute('id', `thread-${thread.id}`);
+                threadLink.style.flexGrow = '1';
+                threadLink.style.paddingRight = '5px'; 
+                
+                if (thread.id === currentThreadId) {
+                    threadLink.classList.add('active');
+                }
+                
+                const deleteBtn = document.createElement('button');
+                deleteBtn.innerHTML = '<i class="material-icons">delete</i>';
+                deleteBtn.title = "Delete Chat";
+                deleteBtn.style.background = 'none';
+                deleteBtn.style.border = 'none';
+                deleteBtn.style.color = '#f44336';
+                deleteBtn.style.fontSize = '1.1rem';
+                deleteBtn.style.padding = '10px 15px';
+                deleteBtn.style.cursor = 'pointer';
+                deleteBtn.style.marginLeft = 'auto';
+                deleteBtn.style.transition = 'color 0.3s, background-color 0.3s';
+                deleteBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    deleteThread(thread.id);
+                };
+                deleteBtn.onmouseover = () => deleteBtn.style.backgroundColor = 'rgba(244, 67, 54, 0.1)';
+                deleteBtn.onmouseout = () => deleteBtn.style.backgroundColor = 'transparent';
+
+
+                threadDiv.appendChild(threadLink);
+                threadDiv.appendChild(deleteBtn);
+                threadsList.appendChild(threadDiv);
+            });
+        }
+        
+        function updateThreadTitle(firstMessage) {
+            if (currentThreadId && allThreads[currentThreadId].title.includes("New Chat")) {
+                // Cire umarnin tsarin daga take
+                let cleanMessage = firstMessage.replace(ABDUL_RULES, '').trim(); 
+                if (cleanMessage.startsWith("USER'S MESSAGE:")) {
+                    cleanMessage = cleanMessage.substring("USER'S MESSAGE:".length).trim();
+                }
+                
+                let newTitle = cleanMessage.substring(0, 30);
+                if (cleanMessage.length > 30) newTitle += '...';
+                
+                allThreads[currentThreadId].title = newTitle || "New Chat";
+                saveThreads();
+                renderThreadsList();
+            }
+        }
+        
+        // --- Core Chat Processing ---
+
+        sendChatBtn.addEventListener('click', async () => {
+            await processUserMessage(chatInput.value.trim());
+        });
+
+        chatInput.addEventListener('keypress', async (e) => {
+            if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { 
+                e.preventDefault(); 
+                await processUserMessage(chatInput.value.trim());
+            } 
+        });
+
+        async function processUserMessage(message) {
+            if (!message && !uploadedImageBase64) return;
+
+            let userMessage = message || "Please describe or process the attached image.";
+            const imageToSend = uploadedImageBase64;
+            
+            // Bincika ko wannan shine saƙon mai amfani na farko (Idan history babu komai)
+            const isFirstUserMessage = allThreads[currentThreadId].history.length === 0;
+
+            if (isFirstUserMessage) {
+                // Haɗa rules a cikin saƙon mai amfani na farko
+                userMessage = ABDUL_RULES + userMessage; 
+            }
+
+            chatInput.value = ''; 
+            adjustTextareaHeight(chatInput); 
+            removeImage(); 
+            
+            const userMsgId = Date.now().toString() + Math.random().toString(36).substring(2, 9);
+            const aiMsgId = (parseInt(userMsgId) + 1).toString() + Math.random().toString(36).substring(2, 9);
+
+
+            // Build content parts for the user message
+            const userParts = [];
+            if (imageToSend) {
+                // Image part
+                userParts.push({
+                    inlineData: {
+                        data: imageToSend.split(',')[1],
+                        mimeType: imageToSend.split(',')[0].split(':')[1].split(';')[0]
+                    }
+                });
+            }
+            // Text part
+            userParts.push({ text: userMessage });
+            
+            const userHistoryPart = {
+                role: "user",
+                parts: userParts,
+                id: userMsgId,
+                image: imageToSend 
+            };
+            
+            allThreads[currentThreadId].history.push(userHistoryPart);
+            
+            // SAUYA MAI MAHIMMANCI: An gyara don cire Umarnin Tsarin (ABDUL_RULES) daga nuni
+            const displayMessage = {
+                 ...userHistoryPart,
+                 parts: [{ text: message || "Please describe or process the attached image." }]
+            };
+            // Cire tsohuwar welcome message idan akwai
+            removeTypingIndicator(chatOutput);
+            
+            appendMessage(chatOutput, "You", displayMessage, false);
+            
+            // Add initial message for AI
+            const aiHistoryPart = {
+                role: "model",
+                parts: [{ text: "Thinking... 🤔" }],
+                id: aiMsgId
+            };
+            allThreads[currentThreadId].history.push(aiHistoryPart);
+            
+            appendMessage(chatOutput, "Abdul's AI Pal", aiHistoryPart, true); 
+            chatOutput.scrollTop = chatOutput.scrollHeight; 
+
+            // Update title
+            if (isFirstUserMessage) {
+                 updateThreadTitle(userMessage);
+            }
+
+            try {
+                // Filter out the temporary 'thinking' message
+                const contents = allThreads[currentThreadId].history.filter(msg => msg.id !== aiMsgId);
+                
+                const responseText = await callGeminiAPI(contents, TEXT_MODEL);
+                
+                // Update history with final response
+                aiHistoryPart.parts[0].text = responseText;
+                
+                removeTypingIndicator(chatOutput);
+                appendMessage(chatOutput, "Abdul's AI Pal", aiHistoryPart);
+
+                saveThreads(); 
+
+            } catch (error) {
+                // Kula da kuskure: Yana nuna cikakken bayani game da kuskuren
+                console.error("Critical Error in processUserMessage:", error);
+                
+                let errorMessage;
+                if (error && typeof error.message === 'string' && error.message.length > 0) {
+                    errorMessage = error.message;
+                } else if (error && error.stack) {
+                    errorMessage = "Network/Unknown Error (Check API Key or Console Stack)"; 
+                } else {
+                    errorMessage = "An Unknown Error Occurred. Check your network or API Key.";
+                }
+
+                // Update history with error message
+                aiHistoryPart.parts[0].text = `Oops! An error occurred. My apologies! 😔 **Error Detail: ${errorMessage}**. Please check your API Key, Network, or ensure the image file is valid.`;
+
+                removeTypingIndicator(chatOutput);
+                appendMessage(chatOutput, "Abdul's AI Pal", aiHistoryPart);
+                
+                saveThreads();
+            }
+        }
+        
+        // --- API Call Function (An Warware Matsalar Role na Ƙarshe) ---
+        async function callGeminiAPI(contents, modelName) {
+            
+            // Tabbatar cewa contents ya fara da 'user'
+            if (contents.length > 0 && contents[0].role !== 'user') {
+                throw new Error("Internal Error: API contents must start with 'user' role.");
+            }
+            
+            // KIRKIRI ABUBUWAN DA API KE BUKATA KAWAI (Yana cire 'id', 'image' da sauran abubuwan UI)
+            const sanitizedContents = contents.map(msg => {
+                return {
+                    role: msg.role,
+                    parts: msg.parts.map(part => {
+                        // Tabbatar cewa part kawai yana da text ko inlineData
+                        if (part.text) return { text: part.text };
+                        if (part.inlineData) return { inlineData: part.inlineData };
+                        return {};
+                    }).filter(part => Object.keys(part).length > 0)
+                };
+            });
+            
+            const finalContents = sanitizedContents;
+
+             const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${GEMINI_API_KEY}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    // Wannan shine mafi sauki da API din ke so (raw content list)
+                    contents: finalContents 
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                const errorMessage = errorData.error?.message || response.statusText;
+                throw new Error(`API Request Failed: Status ${response.status}. Message: ${errorMessage}`);
+            }
+
+            const data = await response.json();
+            if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0]) {
+                return data.candidates[0].content.parts[0].text;
+            } else {
+                const promptFeedback = data.promptFeedback?.blockReason;
+                if (promptFeedback) {
+                     throw new Error(`Prompt Blocked: Reason ${promptFeedback}. Please try a different query.`);
+                }
+                throw new Error("Invalid or empty response format from Gemini API.");
+            }
+        }
+
+
+        // --- UI Utility Functions ---
+
+        // Code/Message Copy Functionality
+        function copyToClipboard(text, element) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalContent = element.innerHTML;
+                element.innerHTML = '<i class="material-icons">check</i> Copied!';
+                setTimeout(() => {
+                    element.innerHTML = originalContent;
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+        }
+        
+        function formatAIResponse(text) {
+            // Gyara 1: A bar shi an yi escape don saƙo na al'ada
+            let formattedText = escapeHtml(text);
+
+            formattedText = formattedText.replace(/```(\w+)?\n([\s\S]*?)\n```/g, (match, lang, code) => {
+                const language = lang ? lang.toUpperCase() : 'CODE';
+                const rawCode = code.trim(); // An ɗauki ainihin rubutun code
+                
+                // MUHIMMI: A canza entities kafin a nuna su a cikin <pre> don kaucewa nuna &quot; da &amp;
+                const escapedCodeForDisplay = rawCode
+                    .replace(/&amp;/g, '&')
+                    .replace(/&lt;/g, '<')
+                    .replace(/&gt;/g, '>')
+                    .replace(/&quot;/g, '"')
+                    .replace(/&#039;/g, "'"); 
+                
+                // Encode the code content for safe passing to JavaScript function
+                // Amfani da rawCode don encode
+                const encodedCode = btoa(unescape(encodeURIComponent(rawCode)));
+                
+                return `
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-language">${language}</span>
+                            <button class="copy-btn" onclick="copyCode(this, '${encodedCode}')">
+                                <i class="material-icons">content_copy</i> Copy
+                            </button>
+                        </div>
+                        <pre><code>${escapedCodeForDisplay}</code></pre>
+                    </div>
+                `;
+            });
+
+            formattedText = formattedText.replace(/`([^`]+)`/g, '<code>$1</code>');
+            formattedText = formattedText.replace(/\*\*(.*?)\*\*|__(.*?)__/g, '<strong>$1$2</strong>');
+            formattedText = formattedText.replace(/\*(.*?)\*|_(.*?)_/g, '<em>$1$2</em>');
+            // Sauya sabon layi zuwa <br> sai dai idan yana cikin <pre> tag
+            formattedText = formattedText.replace(/(?!<pre[^>]*>)([^<\n]+)\n(?!.*?<\/pre>)/g, '$1<br>');
+
+
+            return formattedText;
+        }
+
+        // Gyara 2: Gyara aikin copyCode don cire entities gaba ɗaya
+        window.copyCode = function(button, encodedText) {
+            // Decode the content safely
+            try {
+                const decodedText = decodeURIComponent(escape(atob(encodedText)));
+                
+                // AMFANI DA TEXTAREA DON DECODING KARSHE NA DUKKAN ENTITIES
+                const tempDiv = document.createElement('textarea');
+                tempDiv.innerHTML = decodedText; 
+                const finalCode = tempDiv.value;
+
+                copyToClipboard(finalCode, button);
+            } catch (e) {
+                console.error("Error decoding code for copy:", e);
+                copyToClipboard("Error: Failed to decode code content.", button);
+            }
+        }
+        
+        // Gyara 3: Gyara aikin copyMessage don cire entities a rubutu na al'ada
+        window.copyMessage = function(button, messageId) {
+            let messageText = "Error: Message not found.";
+            
+            // Neman rubutun asali daga tarihin tattaunawa
+            const currentThread = allThreads[currentThreadId];
+            if (currentThread && currentThread.history) {
+                const messageHistory = currentThread.history.find(m => m.id === messageId);
+                if (messageHistory && messageHistory.parts) {
+                    let rawText = messageHistory.parts.find(p => p.text)?.text || 'Image Only Message';
+
+                    // Cire Umarnin Tsarin (ABDUL_RULES) kafin a kwafe
+                    rawText = rawText.replace(ABDUL_RULES, '').trim();
+                    
+                    // AMFANI DA TEXTAREA DON DECODING KARSHE NA DUKKAN ENTITIES
+                    const tempDiv = document.createElement('textarea');
+                    tempDiv.innerHTML = rawText; 
+                    messageText = tempDiv.value; // Wannan yana canza &lt; zuwa <, &gt; zuwa >, da dai sauransu
+
+                }
+            }
+            
+            copyToClipboard(messageText, button);
+        }
+
+        window.deleteMessage = function(messageId) {
+             if (confirm("Are you sure you want to delete this specific message?")) {
+                const thread = allThreads[currentThreadId];
+                if (thread) {
+                    const initialLength = thread.history.length;
+                    // Filter out the message with the matching ID
+                    thread.history = thread.history.filter(msg => msg.id !== messageId);
+                    
+                    if (thread.history.length < initialLength) {
+                        saveThreads();
+                        // Refresh the chat view
+                        switchThread(currentThreadId);
+                    }
+                }
+            }
+        }
+
+        function appendMessage(container, sender, msgObject, isTyping = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', sender.toLowerCase().replace(/[' ]/g, '-'));
+            messageDiv.setAttribute('data-message-id', msgObject.id);
+            
+            let messageText = msgObject.parts.find(p => p.text)?.text || '';
+            const imageData = msgObject.image;
+            
+            // Tabbatar mun cire Umarnin Tsarin (ABDUL_RULES) kafin a nuna shi a UI
+            messageText = messageText.replace(ABDUL_RULES, '').trim(); 
+            if (messageText.startsWith("USER'S MESSAGE:")) {
+                messageText = messageText.substring("USER'S MESSAGE:".length).trim();
+            }
+
+
+            if (isTyping) {
+                messageDiv.classList.add('typing-indicator');
+                messageDiv.innerHTML = `<strong>${sender}:</strong> ${messageText}`;
+            } else {
+                let contentHTML = `<strong>${sender}:</strong> ${formatAIResponse(messageText)}`;
+                
+                if (imageData) {
+                     contentHTML += `<br><img src="${imageData}" alt="Attached Image" style="max-width: 100%; max-height: 200px; border-radius: 8px; margin-top: 10px;">`;
+                }
+
+                messageDiv.innerHTML = contentHTML;
+                
+                 const copyActions = document.createElement('div');
+                 copyActions.classList.add('message-actions');
+                 copyActions.innerHTML = `
+                    <button onclick="copyMessage(this, '${msgObject.id}')" title="Copy Message">
+                        <i class="material-icons" style="font-size: 1.1em;">content_copy</i>
+                    </button>
+                    <button onclick="deleteMessage('${msgObject.id}')" title="Delete Message" style="color: #f44336;">
+                        <i class="material-icons" style="font-size: 1.1em;">delete_outline</i>
+                    </button>
+                 `;
+                 messageDiv.appendChild(copyActions);
+            }
+            container.appendChild(messageDiv);
+            container.scrollTop = container.scrollHeight; 
+        }
+
+        function removeTypingIndicator(container) {
+            const typingIndicator = container.querySelector('.typing-indicator');
+            if (typingIndicator) {
+                container.removeChild(typingIndicator);
+            }
+        }
+
+        function escapeHtml(text) {
+            var map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            // Wannan yana canza duk alamomin zuwa entities don tsaro na XSS
+            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+        }
+
+
+        // --- Image & Voice Handlers ---
+        
+        imageUpload.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedImageBase64 = e.target.result; 
+                    imagePreview.src = uploadedImageBase64;
+                    imageFilename.textContent = file.name.substring(0, 20) + (file.name.length > 20 ? '...' : '');
+                    imagePreviewArea.classList.add('active');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        removeImageBtn.addEventListener('click', removeImage);
+        function removeImage() {
+            uploadedImageBase64 = null;
+            imageUpload.value = '';
+            imagePreviewArea.classList.remove('active');
+            imagePreview.src = '';
+            imageFilename.textContent = '';
+        }
+
+
+        let recognition = null;
+        if ('webkitSpeechRecognition' in window) {
+            recognition = new webkitSpeechRecognition();
+            recognition.interimResults = false; 
+            recognition.lang = 'en-US'; 
+
+            recognition.onresult = function(event) {
+                const transcript = event.results[event.results.length - 1][0].transcript;
+                chatInput.value = transcript;
+                adjustTextareaHeight(chatInput);
+                voiceInputBtn.style.color = ''; 
+                voiceInputBtn.style.backgroundColor = '';
+            };
+
+            recognition.onerror = function(event) {
+                console.error('Speech Recognition Error:', event.error);
+                voiceInputBtn.style.backgroundColor = 'red'; 
+                alert(`Voice Input Error: ${event.error}. Ensure microphone is available and permissions are granted.`);
+            };
+            
+            recognition.onend = function() {
+                 voiceInputBtn.style.backgroundColor = '';
+            }
+
+            voiceInputBtn.addEventListener('click', () => {
+                try {
+                    voiceInputBtn.style.backgroundColor = 'var(--primary-color-light)';
+                    recognition.start();
+                } catch (e) {
+                    voiceInputBtn.style.backgroundColor = 'red';
+                    console.warn("Recognition already started or failed to start:", e);
+                }
+            });
+        } else {
+            voiceInputBtn.style.display = 'none'; 
+        }
+
+
+        // --- Sidebar Toggles ---
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            const iconName = isDark ? 'dark_mode' : 'light_mode';
+            
+            localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+            
+            modeIcon.textContent = iconName;
+            sidebarModeIcon.textContent = iconName;
+        }
+
+        function openNav() {
+            sidebar.style.width = "250px";
+            overlay.classList.add('active');
+        }
+        window.closeNav = function() { 
+            sidebar.style.width = "0";
+            overlay.classList.remove('active');
+        }
+        
+        // Textarea auto-resize
+        function adjustTextareaHeight(textarea) {
+            textarea.style.height = 'auto'; 
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+            if (textarea.scrollHeight > parseInt(getComputedStyle(textarea).maxHeight)) {
+                textarea.style.overflowY = 'auto';
+            } else {
+                textarea.style.overflowY = 'hidden';
+            }
+        }
+        
+        chatInput.addEventListener('input', () => adjustTextareaHeight(chatInput));
+    </script>--->
+    <script src="abduls.js"></script>
+</body>
+</html>
